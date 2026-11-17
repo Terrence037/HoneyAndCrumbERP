@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ERP.api/ERP.api.csproj" />
+  <Project Path="ERP.domain/ERP.domain.csproj" />
+  <Project Path="ERP.infrastructure/ERP.infrastructure.csproj" />
+  <Project Path="HoneyAndCrumb.Client/HoneyAndCrumb.Client.csproj" />
+</Solution>

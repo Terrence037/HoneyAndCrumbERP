@@ -1,0 +1,75 @@
+@baseUrl = https://localhost:7247
+
+### 1. Prove Tenant A (Company 1) works
+GET {{baseUrl}}/test-tenant/1
+
+### 2. Register Tenant B company (check the returned companyId!)
+POST {{baseUrl}}/companies
+Content-Type: application/json
+
+{
+  "companyCode": "COMP-B",
+  "companyName": "Honey & Crumb Tenant B"
+}
+
+### 3. Link Tenant B to db80678 (replace companyId if not 2)
+POST {{baseUrl}}/company-databases
+Content-Type: application/json
+
+{
+  "companyId": 3,
+  "serverName": "db80678.public.databaseasp.net,1433",
+  "databaseName": "db80678",
+  "credentialKey": "TenantB"
+}
+
+### 4. Register a device for Company 1
+POST {{baseUrl}}/devices
+Content-Type: application/json
+
+{
+  "companyId": 1,
+  "deviceCode": "POS-01",
+  "deviceName": "Front Counter POS"
+}
+
+### 5. Add a product to Tenant A (Company 1)
+POST {{baseUrl}}/tenant/1/products
+Content-Type: application/json
+
+{
+  "productCode": "BRD-01",
+  "productName": "Sourdough Loaf",
+  "category": "Bread",
+  "unitPrice": 180.00
+}
+
+### 6. Add a different product to Tenant B (Company 3)
+POST {{baseUrl}}/tenant/3/products
+Content-Type: application/json
+
+{
+  "productCode": "CAK-01",
+  "productName": "Honey Cake",
+  "category": "Cakes",
+  "unitPrice": 450.00
+}
+
+### 7. Verify isolation: Tenant A only shows Sourdough Loaf
+GET {{baseUrl}}/tenant/1/products
+
+### 8. Verify isolation: Tenant B only shows Honey Cake
+GET {{baseUrl}}/tenant/3/products
+
+### 9. Seed dev test users (run once)
+POST {{baseUrl}}/auth/seed-dev
+
+### 10. Test login endpoint
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "companyCode": "COMP-A",
+  "username": "owner1",
+  "password": "Owner123!"
+}
